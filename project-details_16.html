@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <style>
+        :root {
+            --background-color: #f4f4f9;
+            --text-color: #333;
+            --card-background: #fff;
+            --card-border: #ddd;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #121212;
+            --text-color: #fff;
+            --card-background: #1e1e1e;
+            --card-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--text-color);
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .hero {
+            background-color: #0078d7;
+            color: #fff;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .project-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .project-header img {
+            max-width: 100%;
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .project-header .details {
+            flex: 1;
+        }
+
+        .project-header .details h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-header .details p {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .tags {
+            margin: 1rem 0;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #0078d7;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 1rem;
+        }
+
+        .action-buttons button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .action-buttons .apply {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .action-buttons .apply:hover {
+            background: #218838;
+        }
+
+        .action-buttons .bookmark {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .action-buttons .bookmark:hover {
+            background: #e0a800;
+        }
+
+        h3 {
+            color: #0078d7;
+            border-bottom: 1.6px solid #0078d7;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        ul, ol, p {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        ul li, ol li {
+            margin-bottom: 5px;
+        }
+        /* Related Projects Section */
+.related-projects {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.related-projects h3 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #0078d7;
+    padding-bottom: 5px;
+}
+
+.related-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.related-project-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.related-project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.related-project-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.related-project-card h4 {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+    color: #0078d7;
+}
+
+.related-project-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0 1rem 1rem;
+}
+
+.view-details-btn {
+    display: inline-block;
+    margin-top: auto;
+    background-color: #0078d7;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.view-details-btn:hover {
+    background-color: #0056a3;
+    transform: scale(1.05);
+}
+
+        footer {
+            text-align: center;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #themeIcon {
+            font-size: 1.5rem;
+            transition: transform 0.5s ease;
+        }
+
+        .spin-animation {
+            transform: rotate(360deg);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading, please wait...</div>
+    </div>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+        <i id="themeIcon" class="fas fa-sun"></i>
+    </button>
+
+    <header class="hero">
+        <h1>Project Details</h1>
+        <p>Explore the specifics of this exciting project.</p>
+    </header>
+
+    <div class="container">
+        <div class="project-header">
+            <img src="/Skillparadox/6.png" alt="Project Image">
+            <div class="details">
+                <h2>Social Media Campaign Design</h2>
+                <p>Design the Graphics for a Social Media Campaign.</p>
+
+                <div class="tags">
+                    <span class="tag">Canva</span>
+                    <span class="tag">Adobe Photoshop</span>
+                    <span class="tag">Adobe Illustrator</span>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="applyButton" class="apply" onclick="applyForProject('project_1')">Apply Now</button>
+                    <button id="saveButton" class="bookmark" onclick="saveProject('project_1')">Bookmark</button>
+                </div>
+            </div>
+        </div>
+        <section class="project-overview">
+            <h3>Project Overview:</h3>
+            <p>Design a series of posts and banners for a social media campaign, maintaining a consistent theme.</p>
+        </section>
+
+        <section class="project-requirements">
+            <h3>Requirements:</h3>
+            <ol>
+                <li>Create at least five graphics, including one banner and four posts.</li>
+                <li>Use consistent typography, colors, and layout.</li>        
+            </ol>
+        </section>
+
+        <section class="project-features">
+            <h3>Additional Feactures:</h3>
+            <ul>
+                <li>Incorporate engaging calls-to-action in the designs.</li>
+                <li>Optimize designs for multiple platforms like Instagram and Facebook.</li>
+            </ul>
+        </section>
+
+        <section class="project-timeline">
+            <h3>Timeline</h3>
+            <p>Estimated time: <strong>2-3 weeks</strong>.</p>
+        </section>
+        <section class="related-projects">
+            <h3>Related Projects</h3>
+            <div class="related-projects-grid">
+                <div class="related-project-card">
+                    <img src="/Skillparadox/related1.png" alt="Related Project 1">
+                    <h4>Logo Design</h4>
+                    <p>Design a simple and effective logo for a fictional startup.</p>
+                    <a href="project-details_14.html" class="view-details-btn">View Details</a>
+                </div>
+                <div class="related-project-card">
+                    <img src="/Skillparadox/related2.png" alt="Related Project 2">
+                    <h4>Product Packaging Design</h4>
+                    <p>Design an appealing package for a fictional product.</p>
+                    <a href="project-details_17.html" class="view-details-btn">View Details</a>
+                </div>
+                <div class="related-project-card">
+                    <img src="/Skillparadox/related3.png" alt="Related Project 3">
+                    <h4>Infographic Design</h4>
+                    <p>Create an infographic to explain a complex topic visually.</p>
+                    <a href="project-details_18.html" class="view-details-btn">View Details</a>
+                </div>
+            </div>
+        </section>
+
+    <footer>
+        <p>&copy; 2025 Skill Paradox. All rights reserved.</p>
+    </footer>
+    <script>
+        // Mock project data for demonstration
+        const projectData = {
+            id: "project_16", // Unique ID for this project
+            name: "Social Media Campaign Design", // Update dynamically if needed
+            description: "Design the Graphics for a Social Media Campaign."
+        };
+    
+        // Helper functions to manage localStorage
+        function getProjectsFromLocalStorage(key) {
+            const projects = localStorage.getItem(key);
+            return projects ? JSON.parse(projects) : [];
+        }
+    
+        function setProjectsToLocalStorage(key, projects) {
+            localStorage.setItem(key, JSON.stringify(projects));
+        }
+    
+        // Add project to "Applied Projects"
+        function applyForProject(projectId) {
+            const appliedProjects = getProjectsFromLocalStorage("appliedProjects");
+    
+            // Check if project is already applied
+            if (!appliedProjects.find(p => p.id === projectId)) {
+                appliedProjects.push(projectData); // Add project data
+                setProjectsToLocalStorage("appliedProjects", appliedProjects);
+                alert("You have successfully applied for this project!");
+            } else {
+                alert("You already applied for this project.");
+            }
+        }
+    
+        // Add project to "Saved Projects"
+        function saveProject(projectId) {
+            const savedProjects = getProjectsFromLocalStorage("savedProjects");
+    
+            // Check if project is already saved
+            if (!savedProjects.find(p => p.id === projectId)) {
+                savedProjects.push(projectData); // Add project data
+                setProjectsToLocalStorage("savedProjects", savedProjects);
+                alert("Project bookmarked successfully!");
+            } else {
+                alert("This project is already bookmarked.");
+            }
+        }
+        // Update button states on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            const appliedProjects = getProjectsFromLocalStorage("appliedProjects");
+            const savedProjects = getProjectsFromLocalStorage("savedProjects");
+    
+            const isApplied = appliedProjects.find(p => p.id === projectData.id);
+            const isSaved = savedProjects.find(p => p.id === projectData.id);
+    
+            const applyButton = document.getElementById("applyButton");
+            const saveButton = document.getElementById("saveButton");
+    
+            if (isApplied) {
+                applyButton.textContent = "Applied";
+                applyButton.disabled = true;
+                applyButton.style.backgroundColor = "#6c757d"; // Greyed out
+            }
+    
+            if (isSaved) {
+                saveButton.textContent = "Saved";
+                saveButton.disabled = true;
+                saveButton.style.backgroundColor = "#ffc107"; // Greyed out
+            }
+        });
+    
+            // Hide the loader after the page loads
+            window.addEventListener('load', () => {
+                const loader = document.getElementById('loader');
+                loader.style.display = 'none';
+            });
+            
+            function toggleDarkMode() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                const themeIcon = document.getElementById('themeIcon');
+    
+                if (currentTheme === 'dark') {
+                    document.body.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.replace('fa-moon', 'fa-sun');
+                } else {
+                    document.body.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.replace('fa-sun', 'fa-moon');
+                }
+    
+                themeIcon.classList.add('spin-animation');
+                setTimeout(() => themeIcon.classList.remove('spin-animation'), 500);
+            }
+    
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            const themeIcon = document.getElementById('themeIcon');
+            if (savedTheme === 'dark') {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+        </script>
+</body>
+</html>
